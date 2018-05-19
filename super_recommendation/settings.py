@@ -98,8 +98,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'recommendation',
         'USER': 'root',
-        'PASSWORD': '******',
-        'HOST': '********',
+        'PASSWORD': '*****',
+        'HOST': '*****',
         'PORT': 3306,
     }
 }
@@ -139,3 +139,9 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+MAIL = {
+    "mail_host": "smtp.163.com",  # SMTP服务器
+    "mail_user": "*****",  # 用户名
+    "mail_pass": "*****",  # 授权密码，非登录密码
+    "sender": "*****"  # 发件人邮箱(最好写全, 不然会失败)
+}
