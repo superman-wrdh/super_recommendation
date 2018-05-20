@@ -9,6 +9,7 @@ import os
 # Create your views here.
 from super_recommendation.settings import BASE_DIR
 from uuid import uuid4
+from web_api.util.mail import send_email
 
 
 @api_view(http_method_names=['POST', ])
@@ -28,8 +29,14 @@ def first_api(request):
     return Response(resp, status=status.HTTP_200_OK)
 
 
-def _user_exit_check(user_name):
-    user = User.objects.filter(username=user_name).first()
+def _user_exit_check(user_name=None, email=None):
+    user = None
+    if user_name:
+        user = User.objects.filter(username=user_name).first()
+    elif email:
+        user = User.objects.filter(email=email).first()
+    elif user_name and email:
+        user = User.objects.filter(username=user_name, email=email).first()
     if user:
         return True
     else:
@@ -68,6 +75,29 @@ def _create_user_check(user_name):
     return result
 
 
+@api_view(http_method_names=['POST', ])
+@permission_classes((permissions.AllowAny,))
+def send_reg_code(request):
+    params = request.data
+    email = params.get("email")
+    user_name = params.get("user_name")
+    resp = {'success': True}
+    try:
+        is_exit = _user_exit_check(email=email)
+        if is_exit:
+            resp.update({'success': True, 'msg': '邮箱已经被注册'})
+        else:
+            content = "尊敬用户 " + user_name + " 你好,你的激活码是" + str(uuid4())
+            response = send_email(content=content, title='超锅博客用户激活码', receivers=[email])
+            if response['status']:
+                resp.update({'success': True, 'msg': "发送成功"})
+            else:
+                resp.update({'success': False, 'msg': "发送失败"})
+    except Exception as e:
+        resp.update({'success': False, 'msg': str(e)})
+    return Response(resp, status=status.HTTP_200_OK)
+
+
 @api_view(http_method_names=['GET', 'POST'])
 @permission_classes((permissions.AllowAny,))
 def register(request):
@@ -76,22 +106,22 @@ def register(request):
     """
     param = request.data
     reg_code = param.get("reg_code")
-    mobile = param.get("mobile")
     email = param.get("email")
     user_name = param.get("user_name")
     password = param.get("password")
     resp = {'success': True}
     try:
-        r = validate_email_reg_code(mobile=mobile, message_code=reg_code)
+        # r = validate_email_reg_code(mobile=user_name, message_code=reg_code)
+        r = {"status": True, "msg": "限时免验证注册"}
         if r['status']:
             cr = _create_user_check(user_name)
             if cr['status']:
-                user = User(username=str(mobile), email=email, last_name="0")
+                user = User(username=str(user_name), email=email, last_name="0")
                 user.set_password(password)
                 user.save()
-                resp.update({'success': True, 'records': {"user_id": mobile}})
+                resp.update({'success': True, 'records': {"user_id": user_name}})
             else:
-                resp.update({'success': True, 'records': cr['msg']})
+                resp.update({'success': False, 'msg': cr['msg']})
         else:
             resp.update({'success': False, 'msg': r['msg']})
     except Exception as e:
