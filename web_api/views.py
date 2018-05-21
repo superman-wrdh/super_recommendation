@@ -5,10 +5,12 @@ from django.contrib.auth.models import User
 from rest_framework import permissions, status
 from rest_framework.authtoken.models import Token
 import os
-
+from datetime import datetime
 # Create your views here.
 from super_recommendation.settings import BASE_DIR
 from uuid import uuid4
+
+from web_api.models import UserRegCode
 from web_api.util.mail import send_email
 
 
@@ -90,6 +92,8 @@ def send_reg_code(request):
             content = "尊敬用户 " + user_name + " 你好,你的激活码是" + str(uuid4())
             response = send_email(content=content, title='超锅博客用户激活码', receivers=[email])
             if response['status']:
+                user = UserRegCode(id=str(uuid4()), user_id=email, reg_code=str(uuid4()), created_time=datetime.now())
+                user.save()
                 resp.update({'success': True, 'msg': "发送成功"})
             else:
                 resp.update({'success': False, 'msg': "发送失败"})
