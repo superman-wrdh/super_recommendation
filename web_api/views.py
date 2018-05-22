@@ -77,6 +77,24 @@ def _create_user_check(user_name):
     return result
 
 
+def send_emil_limit_check(email):
+    """
+    一个账号1天只能发送5次邮件
+    """
+    date_min = str(datetime.now().date()) + " 00:00"
+    date_max = str(datetime.now().date()) + " 23:59"
+    resp = {}
+    user = UserRegCode.objects.filter(user_id=email, created_time__gte=date_min, created_time__lte=date_max).all()
+    if user:
+        if len(user) > 5:
+            resp.update({"status": False, "msg": "发送达到最大发送限制"})
+        else:
+            resp.update({"status": True, "msg": "可以发送"})
+    else:
+        resp.update({"status": True, "msg": "可以发送"})
+    return resp
+
+
 @api_view(http_method_names=['POST', ])
 @permission_classes((permissions.AllowAny,))
 def send_reg_code(request):
@@ -89,14 +107,20 @@ def send_reg_code(request):
         if is_exit:
             resp.update({'success': True, 'msg': '邮箱已经被注册'})
         else:
-            content = "尊敬用户 " + user_name + " 你好,你的激活码是" + str(uuid4())
-            response = send_email(content=content, title='超锅博客用户激活码', receivers=[email])
-            if response['status']:
-                user = UserRegCode(id=str(uuid4()), user_id=email, reg_code=str(uuid4()), created_time=datetime.now())
-                user.save()
-                resp.update({'success': True, 'msg': "发送成功"})
+            limit_check = send_emil_limit_check(email)
+            if limit_check['status']:
+                reg_code = str(uuid4())
+                content = "尊敬用户 " + user_name + " 你好,你的激活码是" + reg_code
+                response = send_email(content=content, title='超锅博客用户激活码', receivers=[email])
+                if response['status']:
+                    userRegCode = UserRegCode(id=str(uuid4()), user_id=email, reg_code=reg_code,
+                                              created_time=datetime.now())
+                    userRegCode.save()
+                    resp.update({'success': True, 'msg': "发送成功"})
+                else:
+                    resp.update({'success': False, 'msg': "发送失败"})
             else:
-                resp.update({'success': False, 'msg': "发送失败"})
+                resp.update({'success': False, 'msg': limit_check['msg']})
     except Exception as e:
         resp.update({'success': False, 'msg': str(e)})
     return Response(resp, status=status.HTTP_200_OK)
