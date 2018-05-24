@@ -35,11 +35,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'web_api'
 ]
 
-LOCAL_APPS = [
-    'web_api',
-]
+# LOCAL_APPS = [
+#     'web_api',
+# ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
