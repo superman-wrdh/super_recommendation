@@ -235,3 +235,5 @@ def delete(request):
     except Exception as e:
         resp.update({'success': False, 'msg': str(e)})
     return Response(resp, status=status.HTTP_200_OK)
+
+
