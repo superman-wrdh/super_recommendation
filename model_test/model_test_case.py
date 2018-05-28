@@ -39,11 +39,11 @@ def set_up():
     apps.populate(settings.INSTALLED_APPS)
 
 
-set_up()
-
 if __name__ == '__main__':
+    set_up()
     # import you models
     from web_api.models import UserRegCode
+
     # operation
     hosts = UserRegCode.objects.all()
     print(len(hosts))

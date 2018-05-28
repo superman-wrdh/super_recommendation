@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'web_api'
+    'web_api',
+    'blog'
 ]
 
 # LOCAL_APPS = [
