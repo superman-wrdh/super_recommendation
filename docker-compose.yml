@@ -5,6 +5,6 @@ services:
     build: .
     ports:
       - 8000:8000
-    command: python ./mysite/manage.py runserver 0.0.0.0:8000
+    command: python /usr/src/app/manage.py runserver 0.0.0.0:8000
 
 
