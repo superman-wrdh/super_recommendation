@@ -99,19 +99,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'recommendation',
+        'NAME': 'study',
         'USER': 'root',
-        'PASSWORD': 'hcissuperman88',
-        'HOST': '118.24.0.98',
-        'PORT': 8612,
-    },
-    'wsw': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'user_info',
-        'USER': 'root',
-        'PASSWORD': 'wsw@2018',
-        'HOST': '47.98.146.17',
-        'PORT': 8612,
+        'PASSWORD': 'hcissuperman',
+        'HOST': '192.168.199.199',
+        'PORT': 3306,
     }
 }
 

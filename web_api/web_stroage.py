@@ -49,3 +49,12 @@ def load_file():
     获取文件 管理员调用接口 查看全部文件
     """
     pass
+
+
+@api_view(http_method_names=['POST', ])
+@permission_classes((permissions.AllowAny,))
+def blog_list(request):
+    resp = {}
+    from blog.models import Blog
+    rr = Blog.objects.all()
+    return Response(resp, status=status.HTTP_200_OK)

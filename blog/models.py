@@ -3,7 +3,12 @@ from django.db import models
 
 # Create your models here.
 class BlogType(models.Model):
+    class Meta:
+        db_table = "blog_type"
+
     id = models.CharField(primary_key=True, max_length=36)
+    name = models.CharField(max_length=128)
+    order = models.IntegerField()
     """
     idint(11) NOT NULL
     typeNamevarchar(30) NULL
@@ -11,7 +16,24 @@ class BlogType(models.Model):
     """
 
 
+class Bloger(models.Model):
+    id = models.CharField(primary_key=True, max_length=36)
+    name = models.CharField(max_length=128)
+    """
+    idint(11) NOT NULL
+    userNamevarchar(50) NULL
+    passwordvarchar(100) NULL
+    profiletext NULL
+    nickNamevarchar(50) NULL
+    signvarchar(100) NULL
+    imageName
+    """
+
+
 class Blog(models.Model):
+    class Meta:
+        db_table = "blog"
+
     id = models.CharField(primary_key=True, max_length=36)
     title = models.CharField(max_length=128)
     key_world = models.CharField(max_length=128)
@@ -20,6 +42,7 @@ class Blog(models.Model):
     created_date = models.DateTimeField()
     updated_time = models.DateTimeField()
     blog_type = models.ForeignKey(BlogType, on_delete=models.CASCADE)
+    bloger = models.ForeignKey(Bloger, on_delete=models.CASCADE)
     """
     idint(11) NOT NULL
     titlevarchar(200) NULL
@@ -30,19 +53,6 @@ class Blog(models.Model):
     contenttext NULL
     typeIdint(11) NULL
     keyWord
-    """
-
-
-class Bloger(models.Model):
-    id = models.CharField(primary_key=True, max_length=36)
-    """
-    idint(11) NOT NULL
-    userNamevarchar(50) NULL
-    passwordvarchar(100) NULL
-    profiletext NULL
-    nickNamevarchar(50) NULL
-    signvarchar(100) NULL
-    imageName
     """
 
 
