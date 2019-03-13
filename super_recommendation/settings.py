@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'web_api',
-    'blog'
+    'blog',
+    'user_info',
 ]
 
 # LOCAL_APPS = [
@@ -100,9 +101,17 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'recommendation',
         'USER': 'root',
-        'PASSWORD': '*****',
-        'HOST': '*****',
-        'PORT': 3306,
+        'PASSWORD': 'hcissuperman88',
+        'HOST': '118.24.0.98',
+        'PORT': 8612,
+    },
+    'wsw': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'user_info',
+        'USER': 'root',
+        'PASSWORD': 'wsw@2018',
+        'HOST': '47.98.146.17',
+        'PORT': 8612,
     }
 }
 
@@ -143,7 +152,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 MAIL = {
     "mail_host": "smtp.163.com",  # SMTP服务器
-    "mail_user": "*****",  # 用户名
-    "mail_pass": "*****",  # 授权密码，非登录密码
-    "sender": "*****"  # 发件人邮箱(最好写全, 不然会失败)
+    "mail_user": "13419655360@163.com",  # 用户名
+    "mail_pass": "hc19931015",  # 授权密码，非登录密码
+    "sender": "13419655360@163.com"  # 发件人邮箱(最好写全, 不然会失败)
 }

@@ -16,7 +16,8 @@ def upload_file(request):
     多文件上传文件
     """
     params = request.data
-    files = params.getlist('file', None)
+    # request.FILES.get('file') 单文件
+    files = params.getlist('file', None)  # 多文件
     names = []
     resp = {'success': True}
     try:

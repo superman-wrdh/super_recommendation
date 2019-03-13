@@ -47,7 +47,9 @@ def send_email2(SMTP_host, from_account, from_passwd, to_account, subject, conte
 if __name__ == '__main__':
     from uuid import uuid4
 
-    receivers = ["1359931498@qq.com"]
+    #receivers = ["1359931498@qq.com"]
+    receivers = ["wansw1994@163.com"]
     response = send_email(content="点击激活 http://66super.com/index.html?u=21324434&code=" + str(uuid4()), title="超锅网站激活码",
                           receivers=receivers)
     print(response)
+    print('over')

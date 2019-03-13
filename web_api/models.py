@@ -35,6 +35,30 @@ class Resource(models.Model):
     is_public = models.BooleanField()  # 文件能否被公开 需要权限认证才能看
     created_time = models.DateTimeField()
 
+    class Meta:
+        db_table = 'resource'
+
+
+class Musician(models.Model):
+    id = models.CharField(primary_key=True, max_length=36)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    instrument = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'musician'
+
+
+class Album(models.Model):
+    id = models.CharField(primary_key=True, max_length=36)
+    name = models.CharField(max_length=100)
+    release_date = models.DateField()
+    num_stars = models.IntegerField()
+    artist = models.ForeignKey(Musician, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'album'
+
 
 def add():
     x = random.randint(1, 999)
